@@ -1,0 +1,10 @@
+<ul class="<?= $this->navigation()->menu()->getUlClass() ?>">
+    <?php
+    foreach ($this->container as $page) {
+        echo "<li class='nav-item'>
+           <a class='nav-link ".($page->isActive() ? "active" : "")."' href='".$page->getHref()."'>".$page->label."</a>
+        </li>";
+    }
+
+    ?>
+</ul>

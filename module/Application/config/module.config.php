@@ -61,10 +61,12 @@ return [
             [
                 'label' => 'Home',
                 'route' => 'home',
+                'class' => 'nav-link',
             ],
             [
                 'label' => 'Album',
                 'route' => 'album',
+                'class' => 'nav-link',
                 'pages' => [
                     [
                         'label'  => 'Add',
@@ -84,6 +86,7 @@ return [
                 ],
             ],
             [
+                'class' => 'nav-link',
                 'label' => 'Blog',
                 'route' => 'blog',
             ],
