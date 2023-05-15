@@ -21,17 +21,43 @@ return [
     				],
     			],
     		],
+			'login' => [
+                'type' => Segment::class, # change route type from Literal to Segment
+                'options' => [
+                    'route' => '/login[/:returnUrl]',
+                    'constraints' => [
+                        'returnUrl' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\LoginController::class,
+                        'action' => 'index'
+                    ],
+                ],
+            ],
+			'logout' => [
+                'type' => Literal::class, # change route type from Literal to Segment
+                'options' => [
+                    'route' => '/logout',
+                    'defaults' => [
+                        'controller' => Controller\LogoutController::class,
+                        'action' => 'index'
+                    ],
+                ],
+            ],
     	],
     ],
     'controllers' => [
     	'factories' => [
-    		Controller\AuthController::class => InvokableFactory::class,
+    		Controller\AuthController::class => Factory\AuthControllerFactory::class,
+			Controller\LoginController::class => Factory\LoginControllerFactory::class,
+			Controller\LogoutController::class => InvokableFactory::class,
         ],
     ],
     'view_manager' => [
     	'template_map' => [
 
     		'auth/create'   => __DIR__ . '/../view/user-manager/auth/create.phtml',
+			'login/index'   => __DIR__ . '/../view/user-manager/auth/login.phtml', 
            
     	],
     	'template_path_stack' => [

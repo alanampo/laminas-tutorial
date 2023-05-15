@@ -7,7 +7,10 @@ namespace Application;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\Authentication\AuthenticationService;
 
+$auth = new AuthenticationService();
+		            
 return [
     'router' => [
         'routes' => [
@@ -90,6 +93,16 @@ return [
                 'label' => 'Blog',
                 'route' => 'blog',
             ],
+            [
+                'class' => 'nav-link',
+                'label' => $auth->hasIdentity() ? 'Logout' : 'Login',
+                'route' => $auth->hasIdentity() ? 'logout' : 'login',
+            ],
+            !$auth->hasIdentity() ? [
+                'class' => 'nav-link',
+                'label' => 'SignUp',
+                'route' => 'signup',
+            ] : NULL
         ],
     ],
 ];
