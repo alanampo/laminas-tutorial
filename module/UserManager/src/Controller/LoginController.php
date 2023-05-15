@@ -7,7 +7,7 @@ namespace UserManager\Controller;
 use Laminas\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\Authentication\Result;
-use Laminas\Crypt\Password\Bcrypt;
+
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Session\SessionManager;
@@ -59,8 +59,6 @@ class LoginController extends AbstractActionController
 				$authAdapter->setIdentity($data['email']);
 
 
-				# password hashing class
-				$hash = new Bcrypt();
 
 				# well let us use the email address from the form to retrieve data for this user
 				$info = $this->usersTable->fetchAccountByEmail($data['email']);
