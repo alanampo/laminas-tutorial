@@ -65,6 +65,9 @@
             ->breadcrumbs()
             ->setMinDepth(0)
             ->setPartial('partial/breadcrumb') ?>
+
+        <?= $this->partial("partial/flash.phtml", $this->flashMessenger()); ?>
+
         <?= $this->content ?>
         <hr>
         <footer>

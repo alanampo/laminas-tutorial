@@ -28,5 +28,6 @@ return [
     'Laminas\DeveloperTools',
     'Application',
     'Album',
-    "Blog"
+    "Blog",
+    "UserManager"
 ];

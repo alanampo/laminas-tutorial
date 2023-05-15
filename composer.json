@@ -31,7 +31,8 @@
         "psr-4": {
             "Application\\": "module/Application/src/",
             "Album\\": "module/Album/src/",
-            "Blog\\": "module/Blog/src/"
+            "Blog\\": "module/Blog/src/",
+            "UserManager\\": "module/UserManager/src/"
         }
     },
     "autoload-dev": {
