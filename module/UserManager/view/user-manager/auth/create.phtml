@@ -41,6 +41,18 @@ $form->prepare();
                 </div>
 			</div>	
 
+			<!-- add the display name input field -->
+			<div class="mb-3">
+                <?= $this->formLabel($form->get('displayname')); ?>
+				<div class="form-group">
+                   <?= $this->formText($form->get('displayname')); ?>
+				</div>
+                
+                <div class="text-danger">
+                	<?= $this->formElementErrors($form->get('displayname')); ?>
+                </div>
+			</div>	
+
 			
 			<!-- email address input field -->
 			<div class="mb-3">

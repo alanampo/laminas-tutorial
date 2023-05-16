@@ -521,6 +521,56 @@ class UsersTable extends AbstractTableGateway
 			)
 		);
 
+		$inputFilter->add(
+			$factory->createInput(
+				[
+					'name' => 'displayname',
+					'required' => true,
+					'filters' => [
+						['name' => Filter\StripTags::class], # stips html tags
+						//['name' => Filter\StringTrim::class], # removes empty spaces
+						[
+							'name' => I18n\Filter\Alpha::class,
+							'options' => [
+								'allow_white_space' => true
+							]
+						], # allows only [a-zA-Z] characters
+					],
+					'validators' => [
+						['name' => Validator\NotEmpty::class],
+						[
+							'name' => Validator\StringLength::class,
+							'options' => [
+								'min' => 2,
+								'max' => 40,
+								'messages' => [
+									Validator\StringLength::TOO_SHORT => 'Full Name must have at least 2 characters',
+									Validator\StringLength::TOO_LONG => 'Full Name must have at most 40 characters',
+								],
+							],
+						], 
+						[
+							'name' => I18n\Validator\Alpha::class,
+							'options' => [
+								'allowWhiteSpace' => true,
+								'messages' => [
+									I18n\Validator\Alpha::NOT_ALPHA => 'Full Name must consist of letters only',
+								],
+							],
+						],
+						[
+							'name' => Validator\Db\NoRecordExists::class,
+							'options' => [
+								'table' => $this->table, 
+								'field' => 'displayname',
+								'adapter' => $this->adapter,
+							],
+						],
+					],
+				]
+			)
+		);
+
 		# filter and validate gender select field
 		// $inputFilter->add(
 		// 	$factory->createInput(
@@ -553,7 +603,7 @@ class UsersTable extends AbstractTableGateway
 					'filters' => [
 						['name' => Filter\StripTags::class],
 						['name' => Filter\StringTrim::class], 
-						#['name' => Filter\StringToLower::class], comment this line out
+						['name' => Filter\StringToLower::class]
 					],
 					'validators' => [
 						['name' => Validator\NotEmpty::class],
@@ -1074,11 +1124,11 @@ class UsersTable extends AbstractTableGateway
 	{
 		$timeNow = date('Y-m-d H:i:s');
 		$values = [
-			'username' => ucfirst($data['username']),
+			'username' => mb_strtolower($data['username']),
+			'displayname' => ucwords($data['displayname']),
 			'email'    => mb_strtolower($data['email']),
-			/* 'password' => (new Bcrypt())->create($data['password']),  */
-            'password' => $data['password'],
-			// 'birthday' => $data['birthday'],
+			'password' => (new Bcrypt())->create($data['password']),
+            // 'birthday' => $data['birthday'],
 			// 'gender'   => $data['gender'],
 			'role_id'  => $this->assignRoleId(),
 			'created'  => $timeNow,
@@ -1107,9 +1157,9 @@ class UsersTable extends AbstractTableGateway
 	public function updatePassword(string $password, int $userId)
 	{
 		$values = [
-			/* 'password' => (new Bcrypt())->create($password), */
-            'password' => $password,
-			'modified' => date('Y-m-d H:i:s')
+			
+			'password' => (new Bcrypt())->create($password),
+            'modified' => date('Y-m-d H:i:s')
 		];
 
 		$sqlQuery = $this->sql->update()->set($values)->where(['user_id' => $userId]);
@@ -1123,6 +1173,19 @@ class UsersTable extends AbstractTableGateway
 	{
 		$values = [
 			'username' => ucfirst($username),
+			'modified' => date('Y-m-d H:i:s')
+		];
+
+		$sqlQuery = $this->sql->update()->set($values)->where(['user_id' => $userId]);
+		$sqlStmt  = $this->sql->prepareStatementForSqlObject($sqlQuery);
+
+		return $sqlStmt->execute();
+	}
+
+	public function updateDisplayName(string $displayname, int $userId)
+	{
+		$values = [
+			'displayname' => ucwords($displayname),
 			'modified' => date('Y-m-d H:i:s')
 		];
 

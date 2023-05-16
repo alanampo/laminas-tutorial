@@ -27,31 +27,32 @@ class CreateForm extends Form
 				'maxlength' => 25,
 				'pattern' => '^[a-zA-Z0-9]+$',  # enforcing what type of data we accept
 				'data-toggle' => 'tooltip',
-				'class' => 'form-control',   # styling the text field
+				'class' => 'form-control input-username',   # styling the text field
 				'title' => 'Username must consist of alphanumeric characters only',
 				'placeholder' => 'Enter Your Username'
 			]
 		]);
 
-		# gender select field
-		// $this->add([
-		// 	'type' => Element\Select::class,
-		// 	'name' => 'gender',
-		// 	'options' => [
-		// 		'label' => 'Gender',
-		// 		'empty_option' => 'Select...',
-		// 		'value_options' => [
-		// 			'Female' => 'Female',
-		// 			'Male' => 'Male',
-		// 			'Other' => 'Other'
-		// 		],
-		// 	],
-		// 	'attributes' => [
-		// 		'required' => true,
-		// 		'class' => 'custom-select', # styling
-		// 	]
-		// ]);
+		# displayname input field
+		$this->add([
+			'type' => Element\Text::class,
+			'name' => 'displayname',
+			'options' => [
+				'label' => 'Full Name'
+			],
+			'attributes' => [
+				'required' => true,
+				'size' => 40,
+				'maxlength' => 40,
+				'pattern' => "^[a-zA-Z '.-]*$",  # enforcing what type of data we accept
+				'data-toggle' => 'tooltip',
+				'class' => 'form-control input-displayname',   # styling the text field
+				'title' => 'Full Name must consist of letters only',
+				'placeholder' => 'Enter Your Full Name'
+			]
+		]);
 
+	
 		# email address input field
 		$this->add([
 			'type' => Element\Email::class,
@@ -66,7 +67,7 @@ class CreateForm extends Form
 				'pattern' => '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$',
 				'autocomplete' => false,
 				'data-toggle' => 'tooltip',
-				'class' => 'form-control',
+				'class' => 'form-control input-email',
 				'title' => 'Provide a valid and working email address',
 				'placeholder' => 'Enter Your Email Address'
 			]
@@ -86,36 +87,11 @@ class CreateForm extends Form
 				'pattern' => '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$',
 				'autocomplete' => false,
 				'data-toggle' => 'tooltip',
-				'class' => 'form-control',
+				'class' => 'form-control input-email',
 				'title' => 'Email address must match that provided above',
 				'placeholder' => 'Enter Your Email Address Again'
 			]
 		]);
-
-		# birth day select field
-		// $this->add([
-		// 	'type' => Element\DateSelect::class,
-		// 	'name' => 'birthday',
-		// 	'options' => [
-		// 		'label' => 'Select Your Date of Birth',
-		// 		'create_empty_option' => true,
-		// 		'max_year' => date('Y') - 13, # here we want users over the age of 13 only
-		// 		'render_delimiters' => false,
-		// 		'year_attributes' => [
-		// 			'class' => 'custom-select w-30'
-		// 		],
-		// 		'month_attributes' => [
-		// 			'class' => 'custom-select w-30'
-		// 		],
-		// 		'day_attributes' => [
-		// 			'class' => 'custom-select w-30',
-		// 			'id' => 'day'
-		// 		],
-		// 	],
-		// 	'attributes' => [
-		// 		'required' => true
-		// 	]
-		// ]);
 
 		# password input field
 		$this->add([

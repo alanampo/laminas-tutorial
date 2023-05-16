@@ -8,6 +8,8 @@ class UserEntity
 {
 	protected $user_id;
 	protected $username;
+
+	protected $displayname;
 	protected $email;
 	protected $password;
 
@@ -39,6 +41,16 @@ class UserEntity
 		$this->username = $username;
 	}
 
+	public function getDisplayName()
+	{
+		return $this->displayname;
+	}
+
+	public function setDisplayName($displayname)
+	{
+		$this->displayname = $displayname;
+	}
+
 	public function getEmail()
 	{
 		return $this->email;
@@ -58,8 +70,6 @@ class UserEntity
 	{
 		$this->password = $password;
 	}
-
-	
 
 	public function getRoleId()
 	{

@@ -12,9 +12,11 @@
  * file.
  */
 
+
 return [
     'db' => [
         'driver' => 'Pdo_Sqlite',
         'database'    => 'data/laminas1.db',
     ],
+    
 ];

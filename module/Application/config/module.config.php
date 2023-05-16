@@ -8,20 +8,29 @@ use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\Authentication\AuthenticationService;
+use Laminas\Session;
 
 $auth = new AuthenticationService();
 		            
 return [
     'router' => [
         'routes' => [
-            // In module/Application/config/module.config.php:
             'home' => [
                 'type' => Literal::class,
                 'options' => [
                     'route' => '/',
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
-                        // <-- change back here
+                        'action' => 'index',
+                    ],
+                ],
+            ],
+            'admin' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/admin',
+                    'defaults' => [
+                        'controller' => Controller\AdminController::class,
                         'action' => 'index',
                     ],
                 ],
@@ -41,6 +50,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
+            Controller\AdminController::class => InvokableFactory::class,
         ],
     ],
     'view_manager' => [
@@ -52,6 +62,7 @@ return [
         'template_map' => [
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
+            'application/admin/admin' => __DIR__ . '/../view/application/admin/admin.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
         ],
@@ -94,6 +105,11 @@ return [
                 'route' => 'blog',
             ],
             [
+                'label' => 'Admin',
+                'route' => 'admin',
+                'class' => 'nav-link',
+            ],
+            [
                 'class' => 'nav-link',
                 'label' => $auth->hasIdentity() ? 'Logout' : 'Login',
                 'route' => $auth->hasIdentity() ? 'logout' : 'login',
@@ -105,4 +121,18 @@ return [
             ] : NULL
         ],
     ],
+
+    'session_manager' => [
+       'config' => [
+           'class' => Session\Config\SessionConfig::class,
+           'options' => [
+               'name' => 'alantest',
+           ],
+       ],
+       'storage' => Session\Storage\SessionArrayStorage::class,
+       'validators' => [
+           Session\Validator\RemoteAddr::class,
+           Session\Validator\HttpUserAgent::class,
+       ],
+   ],
 ];

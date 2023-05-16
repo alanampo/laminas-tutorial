@@ -53,7 +53,7 @@ return [
 			Controller\LogoutController::class => InvokableFactory::class,
         ],
     ],
-    'view_manager' => [
+    /* 'view_manager' => [
     	'template_map' => [
 
     		'auth/create'   => __DIR__ . '/../view/user-manager/auth/create.phtml',
@@ -63,5 +63,10 @@ return [
     	'template_path_stack' => [
     		'user-manager' => __DIR__ . '/../view'
     	]
-    ]
+    ] */
+    'view_manager' => [
+        'template_path_stack' => [
+            __DIR__ . '/../view',
+        ],
+    ],
 ];
