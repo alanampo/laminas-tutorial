@@ -16,6 +16,10 @@ class LogoutController extends AbstractActionController
 			$auth->clearIdentity();
 		}
 
+		session_destroy();
+		
+		setcookie("alantest-email", "", time() - 3600, "/");
+
 		return $this->redirect()->toRoute('login');
 	}
 }

@@ -8,9 +8,11 @@ use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\Authentication\AuthenticationService;
-use Laminas\Session;
+use Laminas\Session\Storage\SessionArrayStorage;
 
 $auth = new AuthenticationService();
+
+
 		            
 return [
     'router' => [
@@ -25,6 +27,7 @@ return [
                     ],
                 ],
             ],
+            
             'admin' => [
                 'type' => Literal::class,
                 'options' => [
@@ -34,7 +37,47 @@ return [
                         'action' => 'index',
                     ],
                 ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'session' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route'    => '/session',
+                            'defaults' => [
+                                'controller' => Controller\SessionController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    
+                ],
             ],
+
+            'error' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/error',
+                    'defaults' => [
+                        'controller' => Controller\ErrorController::class,
+                        'action' => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    '403' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route'    => '/403',
+                            'defaults' => [
+                                'controller' => Controller\ErrorController::class,
+                                'action'     => 'i403',
+                            ],
+                        ],
+                    ],
+                    
+                ],
+            ],
+            
             'application' => [
                 'type' => Segment::class,
                 'options' => [
@@ -51,6 +94,13 @@ return [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
             Controller\AdminController::class => InvokableFactory::class,
+            Controller\SessionController::class => InvokableFactory::class,
+            Controller\ErrorController::class => InvokableFactory::class,
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            'Laminas\Session\Config\ConfigInterface' => 'Laminas\Session\Service\SessionConfigFactory',
         ],
     ],
     'view_manager' => [
@@ -64,6 +114,7 @@ return [
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'application/admin/admin' => __DIR__ . '/../view/application/admin/admin.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
+            'error/403' => __DIR__ . '/../view/error/403.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
         ],
         'template_path_stack' => [
@@ -121,18 +172,16 @@ return [
             ] : NULL
         ],
     ],
+    'session_config'  => [
+        'remember_me_seconds' => 10,
+        'name' => 'alantest1234',
+        'use_cookies' => true,
+    ],
+    'session_storage' => [
+        'type' => SessionArrayStorage::class,
+        
+    ],
 
-    'session_manager' => [
-       'config' => [
-           'class' => Session\Config\SessionConfig::class,
-           'options' => [
-               'name' => 'alantest',
-           ],
-       ],
-       'storage' => Session\Storage\SessionArrayStorage::class,
-       'validators' => [
-           Session\Validator\RemoteAddr::class,
-           Session\Validator\HttpUserAgent::class,
-       ],
-   ],
+
+   
 ];

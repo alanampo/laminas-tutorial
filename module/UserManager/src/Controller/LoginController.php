@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace UserManager\Controller;
 
-//use Laminas\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
-
 use Laminas\Authentication\AuthenticationService;
 
 
@@ -14,12 +12,18 @@ use Laminas\Authentication\Result;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Session\SessionManager;
+use Laminas\Session\Config\StandardConfig;
+use Laminas\Session\Container as SessionContainer; 
+
+
+use Laminas\Session\Storage\SessionStorage;
 use Laminas\View\Model\ViewModel;
-use UserManager\Form\Auth\LoginForm;
+//use UserManager\Form\Auth\LoginForm;
 use UserManager\Model\Table\UsersTable;
-use Laminas\Crypt\Password\Bcrypt;
+//use Laminas\Crypt\Password\Bcrypt;
 
 use Laminas\Authentication\Adapter\DbTable\CallbackCheckAdapter as AuthAdapter;
+use Laminas\Session\Storage\ArrayStorage;
 
 class LoginController extends AbstractActionController
 {
@@ -44,6 +48,7 @@ class LoginController extends AbstractActionController
 			$email = $data->email;
 			$password = $data->password;
 
+			//verifico login e password
 			$hash = password_hash($password, PASSWORD_DEFAULT);
 
 			$passwordValidation = function ($hash, $password) {
@@ -69,40 +74,55 @@ class LoginController extends AbstractActionController
 			switch ($result->getCode()) {
 
 				case Result::FAILURE_IDENTITY_NOT_FOUND:
+					//se ko ritorna alla login
 					$this->flashMessenger()->addErrorMessage('Not found');
 					return $this->redirect()->toRoute('login');
-					break;
-			
+
+
 				case Result::FAILURE_CREDENTIAL_INVALID:
-					/** do stuff for invalid credential **/
+					//se ko ritorna alla login
 					$this->flashMessenger()->addErrorMessage('Invalid credentials!');
 					return $this->redirect()->toRoute('login');
-					break;
-			
+
+
 				case Result::SUCCESS:
+					//se ok redirect to home page 
+
+					
+					$container = new SessionContainer('adminsession');	 
+					$container->email = $email;
+
+					$container->item = "ABCDEF";
+
+					// $manager = $container->getManager();
+
+					// $data = $authAdapter->getResultRowObject(null, ['created', 'modified']);
+					// $sto = new ArrayStorage((array)$data);
+					
+
+					$storage = $auth->getStorage();
+
+					
+					$storage->write($authAdapter->getResultRowObject(null, ['created', 'modified']));
+
+
+					// echo "<pre>";
+					// print_r($auth->getIdentity());
+					// echo "</pre>";
+					// die();
+
+
 					$this->flashMessenger()->addSuccessMessage('You have logged in successfully');
 					return $this->redirect()->toRoute('admin');
-					break;
-			
+
+
 				default:
 					/** do stuff for other failure **/
 					break;
 			}
-
-			//verifico login e password
-
-			//se ok redirect to home page 
-
-			//se ko ritorna alla login
-
-		} else {
-			return new ViewModel();
 		}
-
-
-
-		die("index post");
 		return new ViewModel();
+
 	}
 	// public function index2Action()
 	// {

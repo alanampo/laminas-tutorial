@@ -14,6 +14,8 @@ class UserEntity
 	protected $password;
 
 	protected $role_id;
+
+	protected $role_name;
 	protected $active;
 	protected $views;
 	protected $created;
@@ -79,6 +81,16 @@ class UserEntity
 	public function setRoleId($role_id)
 	{
 		$this->role_id = $role_id;
+	}
+
+	public function getRoleName()
+	{
+		return $this->role_name;
+	}
+
+	public function setRoleName($role_name)
+	{
+		$this->role_name = $role_name;
 	}
 
 	public function getActive()
