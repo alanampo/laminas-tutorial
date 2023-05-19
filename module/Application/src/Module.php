@@ -17,6 +17,7 @@ use Laminas\Permissions\Acl\Role\GenericRole as Role;
 use Laminas\Permissions\Acl\Resource\GenericResource as Resource;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\View\Model\ViewModel;
+use Application\Service\JWTService;
 
 class Module
 {
@@ -34,6 +35,10 @@ class Module
         $em = $application->getEventManager();
 
         $this->initAcl($e);
+
+
+        $em->attach('route', [$this, 'checkToken'], -10001);
+
         $em->attach('route', [$this, 'checkAcl'], -10000);
     }
     public function initAcl(MvcEvent $e)
@@ -76,28 +81,33 @@ class Module
 
         $roles = ["someUser", "guest", "administrator"];
 
+
         if (!$auth->hasIdentity()) {
             $userRole = 'guest';
         } else {
             $authIdObj = $auth->getIdentity();
             $userRole = $roles[$authIdObj->role_id];
+
+            if (in_array($route, ["admin", "album", "blog"])){
+                $this->checkToken($e);
+            }
         }
 
         if (!$e->getViewModel()->acl->hasResource($route)) {
             // NO RESOURCE IN ACL
             $response = $e->getResponse();
-            $response->setStatusCode(403);
+            $response->setStatusCode(302);
             $e->getViewModel()->message = 'No Resource - You have to list it in ACL (Err: 200215A)';
         } else {
-           
-            
+
+
             if (!$e->getViewModel()->acl->isAllowed($userRole, $route)) {
 
                 $response = $e->getResponse();
-                    $response->getHeaders()->addHeaderLine('Location', '/error/403');
-                    $response->setStatusCode(302);
-                    $response->sendHeaders();
-                    return $response;
+                $response->getHeaders()->addHeaderLine('Location', '/error/403');
+                $response->setStatusCode(302);
+                $response->sendHeaders();
+                return $response;
 
                 // NOT ALLOWED
                 // if ($auth->hasIdentity()) {
@@ -127,6 +137,25 @@ class Module
         }
     }
 
+    public function checkToken(MvcEvent $e)
+    {
+        $auth = new AuthenticationService();
+        $token = $auth->getIdentity()->token;
+
+        if ($token){
+            try {
+                $decoded = JWTService::checkToken($token);      
+               
+            } catch (\Exception $ex) {
+                
+                $response = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', '/error/403');
+                $response->setStatusCode(403);
+                $response->sendHeaders();
+                return $response;
+            }
+        }
+    }
 
 
 

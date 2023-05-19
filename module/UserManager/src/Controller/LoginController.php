@@ -8,19 +8,17 @@ use Laminas\Authentication\AuthenticationService;
 
 
 use Laminas\Authentication\Result;
-
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\Session\SessionManager;
-use Laminas\Session\Config\StandardConfig;
 use Laminas\Session\Container as SessionContainer; 
 
 
 use Laminas\Session\Storage\SessionStorage;
 use Laminas\View\Model\ViewModel;
-//use UserManager\Form\Auth\LoginForm;
 use UserManager\Model\Table\UsersTable;
 //use Laminas\Crypt\Password\Bcrypt;
+
+use Application\Service\JWTService;
 
 use Laminas\Authentication\Adapter\DbTable\CallbackCheckAdapter as AuthAdapter;
 use Laminas\Session\Storage\ArrayStorage;
@@ -34,6 +32,7 @@ class LoginController extends AbstractActionController
 	{
 		$this->adapter = $adapter;
 		$this->usersTable = $usersTable;
+
 	}
 
 	public function indexAction()
@@ -66,7 +65,8 @@ class LoginController extends AbstractActionController
 
 			$authAdapter
 				->setIdentity($email)
-				->setCredential($password);
+				->setCredential($password)
+				;
 
 			// Perform the authentication query, saving the result
 			$result = $authAdapter->authenticate();
@@ -87,8 +87,6 @@ class LoginController extends AbstractActionController
 
 				case Result::SUCCESS:
 					//se ok redirect to home page 
-
-					
 					$container = new SessionContainer('adminsession');	 
 					$container->email = $email;
 
@@ -99,18 +97,21 @@ class LoginController extends AbstractActionController
 					// $data = $authAdapter->getResultRowObject(null, ['created', 'modified']);
 					// $sto = new ArrayStorage((array)$data);
 					
-
 					$storage = $auth->getStorage();
-
 					
-					$storage->write($authAdapter->getResultRowObject(null, ['created', 'modified']));
-
+					$identityObj = $authAdapter->getResultRowObject(null, ['created', 'modified']);
+					$identityObj->token = JWTService::createToken((array)$auth->getIdentity());
+					
+					$storage->write($identityObj);
 
 					// echo "<pre>";
 					// print_r($auth->getIdentity());
 					// echo "</pre>";
 					// die();
-
+					
+					//CREO IL TOKEN E LO METTO NEL SESSION CONTAINER
+					
+					
 
 					$this->flashMessenger()->addSuccessMessage('You have logged in successfully');
 					return $this->redirect()->toRoute('admin');
