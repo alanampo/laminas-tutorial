@@ -4,10 +4,10 @@
 	// TODO: Please follow the instructions to configure the settings for your use case
 	
 	// Create an Azure AD B2C application in the Azure Portal, then configure the following settings
-	$tenant = "name of your Active Directory tenant";
-	$clientID = "client ID of your B2C application in the portal"; 
+	$tenant = "alantestsoft";
+	$clientID = "ac7e3bcc-15d9-4de2-9a31-dd6c4025c805"; 
 	$client_secret = ""; // the client secret for B2C application that you created, only fill this in if you want to use confidential client flow
-	$redirect_uri = urlencode("yourwebsite.com"); 
+	$redirect_uri = urlencode("localhost:8080/login"); 
 	
 	// Decide which authentication flow you would like to follow
 	// To use Implicit Flow (recommended), set response_type to "id_token"
@@ -21,9 +21,9 @@
 	// 1. a generic sign in or sign up policy (no MFA)
 	// 2. an optional administrator sign in or sign up policy (with MFA)
 	// 3. a profile editing policy
-	$generic_policy = "b2c_1_sign_in_or_sign_up";
-	$admin_policy = "b2c_1_admin_sign_in_or_sign_up";
-	$edit_profile_policy = "b2c_1_edit_profile";
+	$generic_policy = "B2C_1_SignUpSignIn";
+	$admin_policy = "B2C_1_SignUpSignIn";
+	$edit_profile_policy = "B2C_1_EditProfile";
 	
 	// List of admins' email addresses. You can also leave this empty.
 	$admins = array("");

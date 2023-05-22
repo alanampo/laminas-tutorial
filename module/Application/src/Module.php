@@ -16,8 +16,12 @@ use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
 use Laminas\Permissions\Acl\Resource\GenericResource as Resource;
 use Laminas\Authentication\AuthenticationService;
+use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Application\Service\JWTService;
+
+use Laminas\Log\Logger;
+use Laminas\Log\Writer\Stream as LogWriterStream;
 
 class Module
 {
@@ -41,11 +45,11 @@ class Module
 
         $em->attach('route', [$this, 'checkAcl'], -10000);
 
-        $em->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onDispatchError'], -500);
+        //$em->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onDispatchError'], -500);
         
-        $em->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatchError'], -100);
+        //$em->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatchError'], -100);
         
-        $em->attach(MvcEvent::EVENT_RENDER_ERROR, [$this,'onDispatchError'], - 100);        
+        //$em->attach(MvcEvent::EVENT_RENDER_ERROR, [$this,'onDispatchError'], - 100);        
 
     }
 
@@ -53,12 +57,25 @@ class Module
     function onDispatchError(MvcEvent $event) {
         $viewModel = $event->getViewModel();
 
-        $childModel = new ViewModel();
-        
         $response = $event->getResponse();
+        $route = $event->getRouteMatch()->getMatchedRouteName();
+
         if($response->getStatusCode() == 403){  
-            $childModel->setTemplate('error/403');
-            $viewModel->addChild($childModel,'content');
+            if ($route == "api") {
+                $event->setViewModel(new JsonModel([
+                    "message" => "403 - Forbidden"
+                ]));
+            }           
+            else{
+                $childModel = new ViewModel();
+                $childModel->setTemplate('error/403');
+                $viewModel->addChild($childModel,'content');
+            }
+        }
+        else if($response->getStatusCode() == 500){  
+            $childModel = new ViewModel();
+            $childModel->setTemplate('error/index');
+            $viewModel->addChild($childModel,'content');   
         }
     }
 
@@ -70,6 +87,7 @@ class Module
         $acl->addResource(new Resource('album'));
         $acl->addResource(new Resource('blog'));
         $acl->addResource(new Resource('admin'));
+        $acl->addResource(new Resource('api'));
 
         //ROLES
         $acl->addRole(new Role('guest'));
@@ -86,6 +104,8 @@ class Module
         $acl->allow('staff', "album");
         $acl->allow('administrator', "admin");
 
+        $acl->allow('administrator', "api");
+
         $e->getViewModel()->acl = $acl;
         // echo $acl->isAllowed('administrator', null, 'update')
         //     ? 'allowed'
@@ -95,8 +115,12 @@ class Module
 
     public function checkAcl(MvcEvent $e)
     {
+        $response = $e->getResponse();
+        //$response->setStatusCode(500);
+        
+        
         $route = $e->getRouteMatch()->getMatchedRouteName();
-
+        
         // set your role
         $auth = new AuthenticationService();
 
@@ -109,7 +133,7 @@ class Module
             $authIdObj = $auth->getIdentity();
             $userRole = $roles[$authIdObj->role_id];
 
-            if (in_array($route, ["admin", "album", "blog"])){
+            if (in_array($route, ["admin", "album", "blog", "api"])){
                 $this->checkToken($e);
             }
         }
@@ -117,8 +141,11 @@ class Module
         if (!$e->getViewModel()->acl->hasResource($route)) {
             // NO RESOURCE IN ACL
             $response = $e->getResponse();
-            $response->setStatusCode(302);
+            
+            //$response->setStatusCode(301);
             $e->getViewModel()->message = 'No Resource';
+
+            
         } else {
 
             if (!$e->getViewModel()->acl->isAllowed($userRole, $route)) {// NOT ALLOWED
@@ -126,7 +153,7 @@ class Module
                 //$response->sendHeaders();
                 if ($auth->hasIdentity()) {
                     $response = $e->getResponse();
-                    $response->setStatusCode(403);
+                    //$response->setStatusCode(500);
                     
                 } else {
                     $response = $e->getResponse();
@@ -156,15 +183,31 @@ class Module
             } catch (\Exception $ex) {
                 
                 $response = $e->getResponse();
-                $response->getHeaders()->addHeaderLine('Location', '/error/403');
                 $response->setStatusCode(403);
-                $response->sendHeaders();
-                return $response;
             }
         }
     }
 
-
+    public function getServiceConfig()
+    {
+        
+        return [
+            
+            'factories' => [
+                
+                'LaminasLog' => function ($sm) {
+                    $filename = 'log_' . date('ymd') . '.log';
+                    $log = new Logger();
+                    $writer = new LogWriterStream('./data/logs/' . $filename);
+                    $log->addWriter($writer);
+                    return $log;
+                },
+                
+                
+            ]
+        ];
+    }
+    
 
 
 

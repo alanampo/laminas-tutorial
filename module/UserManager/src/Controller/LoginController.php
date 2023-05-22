@@ -100,6 +100,7 @@ class LoginController extends AbstractActionController
 					$storage = $auth->getStorage();
 					
 					$identityObj = $authAdapter->getResultRowObject(null, ['created', 'modified']);
+					
 					$identityObj->token = JWTService::createToken((array)$auth->getIdentity());
 					
 					$storage->write($identityObj);
@@ -108,8 +109,6 @@ class LoginController extends AbstractActionController
 					// print_r($auth->getIdentity());
 					// echo "</pre>";
 					// die();
-					
-					//CREO IL TOKEN E LO METTO NEL SESSION CONTAINER
 					
 					
 
