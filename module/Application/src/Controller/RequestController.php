@@ -7,7 +7,7 @@ namespace Application\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class RequestController extends AbstractActionController
 {
     public function indexAction()
     {

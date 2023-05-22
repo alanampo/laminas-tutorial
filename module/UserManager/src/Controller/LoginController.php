@@ -114,7 +114,7 @@ class LoginController extends AbstractActionController
 					
 
 					$this->flashMessenger()->addSuccessMessage('You have logged in successfully');
-					return $this->redirect()->toRoute('admin');
+					return $this->redirect()->toRoute('home');
 
 
 				default:

@@ -40,7 +40,28 @@ class Module
         $em->attach('route', [$this, 'checkToken'], -10001);
 
         $em->attach('route', [$this, 'checkAcl'], -10000);
+
+        $em->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onDispatchError'], -500);
+        
+        $em->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatchError'], -100);
+        
+        $em->attach(MvcEvent::EVENT_RENDER_ERROR, [$this,'onDispatchError'], - 100);        
+
     }
+
+
+    function onDispatchError(MvcEvent $event) {
+        $viewModel = $event->getViewModel();
+
+        $childModel = new ViewModel();
+        
+        $response = $event->getResponse();
+        if($response->getStatusCode() == 403){  
+            $childModel->setTemplate('error/403');
+            $viewModel->addChild($childModel,'content');
+        }
+    }
+
     public function initAcl(MvcEvent $e)
     {
         $acl = new Acl();
@@ -97,41 +118,27 @@ class Module
             // NO RESOURCE IN ACL
             $response = $e->getResponse();
             $response->setStatusCode(302);
-            $e->getViewModel()->message = 'No Resource - You have to list it in ACL (Err: 200215A)';
+            $e->getViewModel()->message = 'No Resource';
         } else {
 
+            if (!$e->getViewModel()->acl->isAllowed($userRole, $route)) {// NOT ALLOWED
+                //$response->getHeaders()->addHeaderLine('Location', '/error/403'); -- PARA REDIRECCIONAR
+                //$response->sendHeaders();
+                if ($auth->hasIdentity()) {
+                    $response = $e->getResponse();
+                    $response->setStatusCode(403);
+                    
+                } else {
+                    $response = $e->getResponse();
 
-            if (!$e->getViewModel()->acl->isAllowed($userRole, $route)) {
-
-                $response = $e->getResponse();
-                $response->getHeaders()->addHeaderLine('Location', '/error/403');
-                $response->setStatusCode(302);
-                $response->sendHeaders();
-                return $response;
-
-                // NOT ALLOWED
-                // if ($auth->hasIdentity()) {
-                //     $response = $e->getResponse();
-                //     $response->getHeaders()->addHeaderLine('Location', '/login');
-                //     $response->setStatusCode(302);
-                //     $response->sendHeaders();
-                //     return $response;
-
-                // } else {
-                //     $response = $e->getResponse();
-
-                //     $response->getHeaders()->addHeaderLine(
-                //         'Location',
-                //         $e->getRequest()->getBaseUrl() . '/login'
-                //     );
-                //     $response->setStatusCode(302);
-                //     $response->sendHeaders();
-                // }
-
-
-
+                    $response->getHeaders()->addHeaderLine(
+                        'Location',
+                        $e->getRequest()->getBaseUrl() . '/login'
+                    );
+                    $response->setStatusCode(302);
+                    $response->sendHeaders();
+                }
             } else { // IS ALLOWED
-                //\Zend\Debug\Debug::dump('IS ALLOWED');  
 
             }
         }
@@ -156,6 +163,8 @@ class Module
             }
         }
     }
+
+
 
 
 

@@ -27,7 +27,16 @@ return [
                     ],
                 ],
             ],
-            
+            'api' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/api',
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
             'admin' => [
                 'type' => Literal::class,
                 'options' => [
@@ -49,35 +58,19 @@ return [
                             ],
                         ],
                     ],
-                    
-                ],
-            ],
-
-            'error' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route' => '/error',
-                    'defaults' => [
-                        'controller' => Controller\ErrorController::class,
-                        'action' => 'index',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    '403' => [
+                    'request' => [
                         'type' => Literal::class,
                         'options' => [
-                            'route'    => '/403',
+                            'route'    => '/request',
                             'defaults' => [
-                                'controller' => Controller\ErrorController::class,
-                                'action'     => 'i403',
+                                'controller' => Controller\RequestController::class,
+                                'action'     => 'index',
                             ],
                         ],
                     ],
                     
                 ],
             ],
-            
             'application' => [
                 'type' => Segment::class,
                 'options' => [
@@ -95,7 +88,8 @@ return [
             Controller\IndexController::class => InvokableFactory::class,
             Controller\AdminController::class => InvokableFactory::class,
             Controller\SessionController::class => InvokableFactory::class,
-            Controller\ErrorController::class => InvokableFactory::class,
+            Controller\RequestController::class => InvokableFactory::class,
+            Controller\ApiController::class => InvokableFactory::class,
         ],
     ],
     'service_manager' => [
@@ -119,6 +113,9 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+        'strategies' => [
+            'ViewJsonStrategy',
         ],
     ],
     'navigation' => [
