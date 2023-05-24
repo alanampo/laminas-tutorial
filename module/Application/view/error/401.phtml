@@ -1,0 +1,14 @@
+<?php
+
+use Laminas\Mvc\Application;
+
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ */
+
+?>
+<h1>A 401 - Unauthorized Error occurred</h1>
+
+<h3>You are not allowed to access the Admin Dashboard because you are not logged in.</h3>
+
+<a href="<?= $this->url('login') ?>" class="btn btn-lg btn-primary">Go to Login</a>

@@ -22,16 +22,22 @@ class RequestController extends AbstractActionController
     {
         //1 / 0;
         
-        
-        try {
-            throw new Exception("Prova 1");
+       
+        // try {
+        //     throw new Exception("Prova 1");
             
-        } catch (\Throwable $e) {
-            $this->logger->log(Logger::INFO, $e->getMessage());
-            throw new Exception("ERROR: ".$e->getMessage());
-        }
+        // } catch (\Throwable $e) {
+        //     $this->logger->log(Logger::INFO, $e->getMessage());
+        //     throw new Exception("ERROR: ".$e->getMessage());
+        // }
+
+        $response = $this->getResponse();
+        $response->setStatusCode(203);
+        
+        
         
         $v = new ViewModel();
+        
         return $v;
     }
 }

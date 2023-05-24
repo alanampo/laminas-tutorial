@@ -9,10 +9,10 @@ return [
     'Laminas\Cache',
     'Laminas\Paginator',
     'Laminas\Navigation',
-    'Laminas\Mvc\Plugin\FilePrg',
+    // 'Laminas\Mvc\Plugin\FilePrg',
     'Laminas\Mvc\Plugin\FlashMessenger',
     'Laminas\Mvc\Plugin\Identity',
-    'Laminas\Mvc\Plugin\Prg',
+    // 'Laminas\Mvc\Plugin\Prg',
     'Laminas\Session',
     'Laminas\Mvc\Middleware',
     'Laminas\Form',
@@ -24,11 +24,12 @@ return [
     'Laminas\Db',
     'Laminas\Router',
     'Laminas\Validator',
-    'Laminas\ZendFrameworkBridge',
-    'Laminas\Diactoros',
+    // 'Laminas\ZendFrameworkBridge',
+    // 'Laminas\Diactoros',
     'Laminas\DeveloperTools',
     'Application',
     'Album',
     "Blog",
-    "UserManager"
+    "UserManager",
+    "Company"
 ];

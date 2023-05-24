@@ -36,7 +36,8 @@
             "Application\\": "module/Application/src/",
             "Album\\": "module/Album/src/",
             "Blog\\": "module/Blog/src/",
-            "UserManager\\": "module/UserManager/src/"
+            "UserManager\\": "module/UserManager/src/",
+            "Company\\": "module/Company/src/"
         }
     },
     "autoload-dev": {

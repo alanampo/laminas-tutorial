@@ -45,11 +45,11 @@ class Module
 
         $em->attach('route', [$this, 'checkAcl'], -10000);
 
-        //$em->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onDispatchError'], -500);
+        // $em->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onDispatchError'], -500);
         
-        //$em->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatchError'], -100);
+        // $em->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatchError'], -100);
         
-        //$em->attach(MvcEvent::EVENT_RENDER_ERROR, [$this,'onDispatchError'], - 100);        
+        // $em->attach(MvcEvent::EVENT_RENDER_ERROR, [$this,'onDispatchError'], - 100);        
 
     }
 
@@ -60,7 +60,12 @@ class Module
         $response = $event->getResponse();
         $route = $event->getRouteMatch()->getMatchedRouteName();
 
-        if($response->getStatusCode() == 403){  
+        if($response->getStatusCode() == 401){  
+            $childModel = new ViewModel();
+            $childModel->setTemplate('error/401');
+            $viewModel->addChild($childModel,'content');   
+        }
+        elseif($response->getStatusCode() == 403){  
             if ($route == "api") {
                 $event->setViewModel(new JsonModel([
                     "message" => "403 - Forbidden"
@@ -77,6 +82,7 @@ class Module
             $childModel->setTemplate('error/index');
             $viewModel->addChild($childModel,'content');   
         }
+
     }
 
     public function initAcl(MvcEvent $e)
@@ -147,26 +153,33 @@ class Module
 
             
         } else {
-
+            
             if (!$e->getViewModel()->acl->isAllowed($userRole, $route)) {// NOT ALLOWED
                 //$response->getHeaders()->addHeaderLine('Location', '/error/403'); -- PARA REDIRECCIONAR
                 //$response->sendHeaders();
+               
+                
+                
                 if ($auth->hasIdentity()) {
                     $response = $e->getResponse();
-                    //$response->setStatusCode(500);
+                    $response->setStatusCode(403);
+                    
+                   
                     
                 } else {
                     $response = $e->getResponse();
 
-                    $response->getHeaders()->addHeaderLine(
+                   /*  $response->getHeaders()->addHeaderLine(
                         'Location',
                         $e->getRequest()->getBaseUrl() . '/login'
-                    );
-                    $response->setStatusCode(302);
-                    $response->sendHeaders();
+                    ); */
+                    $response->setStatusCode(401);
+                    //$response->sendHeaders();
+
+                   
                 }
             } else { // IS ALLOWED
-
+                
             }
         }
     }

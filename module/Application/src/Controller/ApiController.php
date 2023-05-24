@@ -19,8 +19,10 @@ class ApiController extends AbstractActionController
             );
 
         $viewModel = new JsonModel($json);
-        //$viewModel->setVariable('data', $json);
-        //$viewModel->setVariable('', $json);
+
+        $response = $this->getResponse();
+        $response->setStatusCode(206);
+        
        
         return $viewModel;
 

@@ -82,6 +82,8 @@ class LoginController extends AbstractActionController
 				case Result::FAILURE_CREDENTIAL_INVALID:
 					//se ko ritorna alla login
 					$this->flashMessenger()->addErrorMessage('Invalid credentials!');
+
+					
 					return $this->redirect()->toRoute('login');
 
 
@@ -90,31 +92,22 @@ class LoginController extends AbstractActionController
 					$container = new SessionContainer('adminsession');	 
 					$container->email = $email;
 
-					$container->item = "ABCDEF";
-
-					// $manager = $container->getManager();
-
-					// $data = $authAdapter->getResultRowObject(null, ['created', 'modified']);
-					// $sto = new ArrayStorage((array)$data);
-					
 					$storage = $auth->getStorage();
 					
-					$identityObj = $authAdapter->getResultRowObject(null, ['created', 'modified']);
+					$obj = $authAdapter->getResultRowObject(null, ['created', 'modified']);
+					$obj->token = JWTService::createToken((array)$auth->getIdentity());
+
 					
-					$identityObj->token = JWTService::createToken((array)$auth->getIdentity());
-					
-					$storage->write($identityObj);
+					$storage->write($obj);
 
 					// echo "<pre>";
 					// print_r($auth->getIdentity());
 					// echo "</pre>";
 					// die();
 					
-					
 
 					$this->flashMessenger()->addSuccessMessage('You have logged in successfully');
 					return $this->redirect()->toRoute('home');
-
 
 				default:
 					/** do stuff for other failure **/
