@@ -19,6 +19,13 @@ class Employee implements EmployeeInterface
      */
     private $codiceFiscale;
 
+    // public function __construct($idEmployee = null, $firstName, $codiceFiscale)
+    // {
+    //     $this->idEmployee=$idEmployee;
+    //     $this->firstName=$firstName;
+    //     $this->codiceFiscale=$codiceFiscale;
+    // }
+
     public function getId()
     {
         return $this->idEmployee;

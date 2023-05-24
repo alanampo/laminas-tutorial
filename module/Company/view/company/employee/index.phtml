@@ -1,5 +1,19 @@
 <h1>Employee List</h1>
 
+
 <div class="list-group">
-<?php print_r($this->data);die(); ?>
+<?php foreach ($this->data as $employee): ?>
+  <div class="list-group-item">
+    <h4 class="list-group-item-heading">
+      <a href="<?= $this->url('blog/detail', ['id' => $employee['idEmployee']]) ?>">
+        <?= $employee["firstName"]." | C.F: ".$employee["codiceFiscale"]?>
+      </a>
+    </h4>
+
+    <div class="btn-group" role="group" aria-label="Post actions">
+      <a class="btn btn-xs btn-default" href="<?= $this->url('blog/edit', ['id' => $employee['idEmployee']]) ?>">Edit</a>
+      <a class="btn btn-xs btn-danger" href="<?= $this->url('blog/delete', ['id' => $employee['idEmployee']]) ?>">Delete</a>
+    </div>
+  </div>
+<?php endforeach ?>
 </div>
