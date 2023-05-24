@@ -16,7 +16,7 @@ namespace BjyAuthorize\Provider\Role;
 interface ProviderInterface
 {
     /**
-     * @return \Zend\Permissions\Acl\Role\RoleInterface[]
+     * @return \Laminas\Permissions\Acl\Role\RoleInterface[]
      */
     public function getRoles();
 }

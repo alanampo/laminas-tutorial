@@ -9,7 +9,7 @@
 namespace BjyAuthorize\Acl;
 
 use BjyAuthorize\Exception;
-use Zend\Permissions\Acl\Role\RoleInterface;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 
 /**
  * Base role object

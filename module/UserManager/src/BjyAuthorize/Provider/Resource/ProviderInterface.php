@@ -16,7 +16,7 @@ namespace BjyAuthorize\Provider\Resource;
 interface ProviderInterface
 {
     /**
-     * @return \Zend\Permissions\Acl\Resource\ResourceInterface[]
+     * @return \Laminas\Permissions\Acl\Resource\ResourceInterface[]
      */
     public function getResources();
 }

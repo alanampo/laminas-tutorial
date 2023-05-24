@@ -7,13 +7,14 @@
  */
 
 namespace BjyAuthorize\Service;
+use BjyAuthorize\Factory\Service\BaseProvidersServiceFactory;
 
 /**
- * Factory responsible of a set of {@see \BjyAuthorize\Provider\Role\ProviderInterface}
+ * Factory responsible of building a set of {@see \BjyAuthorize\Guard\GuardInterface}
  *
  * @author Marco Pivetta <ocramius@gmail.com>
  */
-class RoleProvidersServiceFactory extends BaseProvidersServiceFactory
+class GuardServiceFactory extends BaseProvidersServiceFactory
 {
-    const PROVIDER_SETTING = 'role_providers';
+    const PROVIDER_SETTING = 'guards';
 }

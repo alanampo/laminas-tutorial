@@ -16,12 +16,12 @@ namespace BjyAuthorize\Provider\Resource;
 class Config implements ProviderInterface
 {
     /**
-     * @var \Zend\Permissions\Acl\Resource\ResourceInterface[]
+     * @var \Laminas\Permissions\Acl\Resource\ResourceInterface[]
      */
     protected $resources = array();
 
     /**
-     * @param \Zend\Permissions\Acl\Resource\ResourceInterface[] $config
+     * @param \Laminas\Permissions\Acl\Resource\ResourceInterface[] $config
      */
     public function __construct(array $config = array())
     {

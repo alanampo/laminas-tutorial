@@ -6,10 +6,11 @@
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace BjyAuthorize\Service;
+namespace BjyAuthorize\Factory\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+
+use Interop\Container\ContainerInterface;
 
 /**
  * Base factory responsible of instantiating providers
@@ -25,16 +26,17 @@ abstract class BaseProvidersServiceFactory implements FactoryInterface
      *
      * @return array
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+   
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config    = $serviceLocator->get('BjyAuthorize\Config');
+        $config    = $container->get('BjyAuthorize\Config');
         $providers = array();
 
         foreach ($config[static::PROVIDER_SETTING] as $providerName => $providerConfig) {
-            if ($serviceLocator->has($providerName)) {
-                $providers[] = $serviceLocator->get($providerName);
+            if ($container->has($providerName)) {
+                $providers[] = $container->get($providerName);
             } else {
-                $providers[] = new $providerName($providerConfig, $serviceLocator);
+                $providers[] = new $providerName($providerConfig, $container);
             }
         }
 

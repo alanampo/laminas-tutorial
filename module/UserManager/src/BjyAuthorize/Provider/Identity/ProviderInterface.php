@@ -19,7 +19,7 @@ interface ProviderInterface
     /**
      * Retrieve roles for the current identity
      *
-     * @return string[]|\Zend\Permissions\Acl\Role\RoleInterface[]
+     * @return string[]|\Laminas\Permissions\Acl\Role\RoleInterface[]
      */
     public function getIdentityRoles();
 }

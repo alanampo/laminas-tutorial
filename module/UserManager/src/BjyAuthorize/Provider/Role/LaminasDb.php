@@ -9,15 +9,15 @@
 namespace BjyAuthorize\Provider\Role;
 
 use BjyAuthorize\Acl\Role;
-use Zend\Db\Sql\Select;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Db\Sql\Select;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Role provider based on a {@see \Zend\Db\Adaper\Adapter}
+ * Role provider based on a {@see \Laminas\Db\Adaper\Adapter}
  *
  * @author Ben Youngblood <bx.youngblood@gmail.com>
  */
-class ZendDb implements ProviderInterface
+class LaminasDb implements ProviderInterface
 {
     /**
      * @var ServiceLocatorInterface

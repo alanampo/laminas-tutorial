@@ -18,7 +18,7 @@ use BjyAuthorize\Acl\Role;
 class Config implements ProviderInterface
 {
     /**
-     * @var \Zend\Permissions\Acl\Role\RoleInterface[]
+     * @var \Laminas\Permissions\Acl\Role\RoleInterface[]
      */
     protected $roles = array();
 

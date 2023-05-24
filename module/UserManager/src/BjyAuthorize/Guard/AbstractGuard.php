@@ -10,8 +10,8 @@ namespace BjyAuthorize\Guard;
 
 use BjyAuthorize\Provider\Rule\ProviderInterface as RuleProviderInterface;
 use BjyAuthorize\Provider\Resource\ProviderInterface as ResourceProviderInterface;
-use \Zend\EventManager\AbstractListenerAggregate;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use \Laminas\EventManager\AbstractListenerAggregate;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 abstract class AbstractGuard extends AbstractListenerAggregate implements
     GuardInterface,

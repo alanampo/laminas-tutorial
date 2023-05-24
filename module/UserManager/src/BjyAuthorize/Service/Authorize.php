@@ -3,7 +3,7 @@
  * BjyAuthorize Module (https://github.com/bjyoungblood/BjyAuthorize)
  *
  * @link https://github.com/bjyoungblood/BjyAuthorize for the canonical source repository
- * @license http://framework.zend.com/license/new-bsd New BSD License
+ * @license http://framework.Laminas.com/license/new-bsd New BSD License
  */
 
 namespace BjyAuthorize\Service;
@@ -12,14 +12,14 @@ use BjyAuthorize\Provider\Role\ProviderInterface as RoleProvider;
 use BjyAuthorize\Provider\Resource\ProviderInterface as ResourceProvider;
 use BjyAuthorize\Provider\Rule\ProviderInterface as RuleProvider;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProvider;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Exception\InvalidArgumentException;
-use Zend\Permissions\Acl\Resource\GenericResource;
-use BjyAuthorize\Acl\Role;
+
+use Interop\Container\ContainerInterface;
+use Laminas\Permissions\Acl\Acl;
+use Laminas\Permissions\Acl\Exception\InvalidArgumentException;
+use Laminas\Permissions\Acl\Resource\GenericResource;
+
 use BjyAuthorize\Guard\GuardInterface;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Zend\Cache\Storage\StorageInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Authorize service
@@ -68,7 +68,7 @@ class Authorize
     protected $loaded;
 
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var  \Interop\Container\ContainerInterface; 
      */
     protected $serviceLocator;
 
@@ -79,9 +79,9 @@ class Authorize
 
     /**
      * @param array                                         $config
-     * @param \Zend\ServiceManager\ServiceLocatorInterface  $serviceLocator
+     * @param \Interop\Container\ContainerInterface;  $serviceLocator
      */
-    public function __construct(array $config, ServiceLocatorInterface $serviceLocator)
+    public function __construct(array $config, ContainerInterface $serviceLocator)
     {
         $this->config         = $config;
         $this->serviceLocator = $serviceLocator;
@@ -92,11 +92,7 @@ class Authorize
     }
 
     /**
-     * @deprecated this method will be removed in BjyAuthorize 2.0.x
-     *
-     * @param RoleProvider $provider
-     *
-     * @return self
+     * @return RoleProvider $provider
      */
     public function addRoleProvider(RoleProvider $provider)
     {
@@ -108,11 +104,7 @@ class Authorize
     }
 
     /**
-     * @deprecated this method will be removed in BjyAuthorize 2.0.x
-     *
-     * @param ResourceProvider $provider
-     *
-     * @return self
+     * @return ResourceProvider $provider
      */
     public function addResourceProvider(ResourceProvider $provider)
     {
@@ -285,7 +277,7 @@ class Authorize
     /**
      * @deprecated this method will be removed in BjyAuthorize 2.0.x
      *
-     * @param \Zend\Permissions\Acl\Role\RoleInterface[] $roles
+     * @param \Laminas\Permissions\Acl\Role\RoleInterface[] $roles
      */
     protected function addRoles($roles)
     {
@@ -311,7 +303,7 @@ class Authorize
     /**
      * @deprecated this method will be removed in BjyAuthorize 2.0.x
      *
-     * @param string[]|\Zend\Permissions\Acl\Resource\ResourceInterface[] $resources
+     * @param string[]|\Laminas\Permissions\Acl\Resource\ResourceInterface[] $resources
      * @param mixed|null                                                  $parent
      */
     protected function loadResource($resources, $parent = null)

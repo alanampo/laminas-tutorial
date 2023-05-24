@@ -102,11 +102,12 @@ return [
     ),
 
     'service_manager' => array(
+        
         'factories' => array(
             // 'BjyAuthorize\Cache'                    => 'BjyAuthorize\Service\CacheFactory',
             // 'BjyAuthorize\CacheKeyGenerator'        => 'BjyAuthorize\Service\CacheKeyGeneratorFactory',
-            'BjyAuthorize\Config'                   => \BjyAuthorize\Service\ConfigServiceFactory::class,
-            // 'BjyAuthorize\Guards'                   => 'BjyAuthorize\Service\GuardsServiceFactory',
+            'BjyAuthorize\Config'                   => \BjyAuthorize\Service\Factory\ConfigServiceFactory::class,
+            'BjyAuthorize\Guards'                   => \BjyAuthorize\Service\GuardServiceFactory::class,
             // 'BjyAuthorize\RoleProviders'            => 'BjyAuthorize\Service\RoleProvidersServiceFactory',
             // 'BjyAuthorize\ResourceProviders'        => 'BjyAuthorize\Service\ResourceProvidersServiceFactory',
             // 'BjyAuthorize\RuleProviders'            => 'BjyAuthorize\Service\RuleProvidersServiceFactory',
@@ -116,7 +117,7 @@ return [
             // 'BjyAuthorize\Provider\Role\ZendDb'     => 'BjyAuthorize\Service\ZendDbRoleProviderServiceFactory',
             // 'BjyAuthorize\Provider\Rule\Config'     => 'BjyAuthorize\Service\ConfigRuleProviderServiceFactory',
             // 'BjyAuthorize\Provider\Resource\Config' => 'BjyAuthorize\Service\ConfigResourceProviderServiceFactory',
-            // 'BjyAuthorize\Service\Authorize'        => 'BjyAuthorize\Service\AuthorizeFactory',
+            'BjyAuthorize\Service\Authorize'        => \BjyAuthorize\Service\AuthorizeFactory::class,
             // 'BjyAuthorize\Provider\Identity\ProviderInterface'
             //     => 'BjyAuthorize\Service\IdentityProviderServiceFactory',
             // 'BjyAuthorize\Provider\Identity\AuthenticationIdentityProvider'

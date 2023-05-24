@@ -34,7 +34,7 @@ class Employee implements EmployeeInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getFirstName()
     {
         return $this->firstName;
     }

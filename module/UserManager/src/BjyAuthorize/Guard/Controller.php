@@ -3,20 +3,20 @@
  * BjyAuthorize Module (https://github.com/bjyoungblood/BjyAuthorize)
  *
  * @link https://github.com/bjyoungblood/BjyAuthorize for the canonical source repository
- * @license http://framework.zend.com/license/new-bsd New BSD License
+ * @license http://framework.Laminas.com/license/new-bsd New BSD License
  */
 
 namespace BjyAuthorize\Guard;
 
 use BjyAuthorize\Exception\UnAuthorizedException;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Http\Request as HttpRequest;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Http\Request as HttpRequest;
 
 /**
  * Controller Guard listener, allows checking of permissions
- * during {@see \Zend\Mvc\MvcEvent::EVENT_DISPATCH}
+ * during {@see \Laminas\Mvc\MvcEvent::EVENT_DISPATCH}
  *
  * @author Ben Youngblood <bx.youngblood@gmail.com>
  */
@@ -100,7 +100,7 @@ class Controller extends AbstractGuard
         $errorMessage = sprintf("You are not authorized to access %s:%s", $controller, $action);
         $event->setParam('exception', new UnAuthorizedException($errorMessage));
 
-        /* @var $app \Zend\Mvc\ApplicationInterface */
+        /* @var $app \Laminas\Mvc\ApplicationInterface */
         $app = $event->getTarget();
         $app->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
     }

@@ -3,19 +3,19 @@
  * BjyAuthorize Module (https://github.com/bjyoungblood/BjyAuthorize)
  *
  * @link https://github.com/bjyoungblood/BjyAuthorize for the canonical source repository
- * @license http://framework.zend.com/license/new-bsd New BSD License
+ * @license http://framework.Laminas.com/license/new-bsd New BSD License
  */
 
 namespace BjyAuthorize\Guard;
 
 use BjyAuthorize\Exception\UnAuthorizedException;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\Mvc\MvcEvent;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Route Guard listener, allows checking of permissions
- * during {@see \Zend\Mvc\MvcEvent::EVENT_ROUTE}
+ * during {@see \Laminas\Mvc\MvcEvent::EVENT_ROUTE}
  *
  * @author Ben Youngblood <bx.youngblood@gmail.com>
  */
@@ -63,7 +63,7 @@ class Route extends AbstractGuard
         $event->setParam('identity', $service->getIdentity());
         $event->setParam('exception', new UnAuthorizedException('You are not authorized to access ' . $routeName));
 
-        /* @var $app \Zend\Mvc\Application */
+        /* @var $app \Laminas\Mvc\Application */
         $app = $event->getTarget();
 
         $app->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);

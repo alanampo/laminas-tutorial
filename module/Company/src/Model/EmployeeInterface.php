@@ -15,7 +15,7 @@ interface EmployeeInterface
      *
      * @return string
      */
-    public function getName();
+    public function getFirstName();
     
     /**
      * Will return the CODICE FISCALE of the Employee

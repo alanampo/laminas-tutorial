@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UserManager;
 
 use Laminas\Db\Adapter\Adapter;
+use Laminas\ServiceManager\AbstractPluginManager;
 use UserManager\Model\Table\UsersTable;
 
 
@@ -22,11 +23,20 @@ class Module
         $serviceManager = $app->getServiceManager();
         
         
-        //$config         = $serviceManager->get('BjyAuthorize\Config');
+        
+        $config         = $serviceManager->get('BjyAuthorize\Config');
+        print_r($config);
+        die();
+        
+        $configBjy = $config["service_manager"]["factories"]["BjyAuthorize\Config"];
+       
+        $configGuard = $serviceManager->get('config')["service_manager"]["factories"]["BjyAuthorize\Guards"];
+        //$configGuard = $config["service_manager"]["factories"]["BjyAuthorize\Guards"];
         // $strategy       = $serviceManager->get($config['unauthorized_strategy']);
-        // $guards         = $serviceManager->get('BjyAuthorize\Guards');
-
+        
+       
         // foreach ($guards as $guard) {
+            
         //     $app->getEventManager()->attach($guard);
         // }
 
@@ -36,6 +46,7 @@ class Module
 
     public function getConfig(): array
     {
+        
         return include __DIR__ . "/../config/module.config.php";
     }
 
@@ -49,5 +60,17 @@ class Module
                 }
             ]
         ];
+    }
+
+    public function getControllerPluginConfig()
+    {
+        return array(
+            'factories' => array(
+                'isAllowed' => function ($container) {
+                    $authorize = $container->get('BjyAuthorize\Service\Authorize');
+                    return new \BjyAuthorize\Controller\Plugin\IsAllowed($authorize);
+                }
+            ),
+        );
     }
 }

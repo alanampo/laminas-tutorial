@@ -10,8 +10,7 @@ namespace BjyAuthorize\Provider\Role;
 
 use BjyAuthorize\Acl\Role;
 use BjyAuthorize\Acl\HierarchicalRoleInterface;
-use Doctrine\Common\Persistence\ObjectRepository;
-use Zend\Permissions\Acl\Role\RoleInterface;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 
 /**
  * Role provider based on a {@see \Doctrine\Common\Persistence\ObjectRepository}
@@ -20,15 +19,9 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  */
 class ObjectRepositoryProvider implements ProviderInterface
 {
-    /**
-     * @var \Doctrine\Common\Persistence\ObjectRepository
-     */
     protected $objectRepository;
 
-    /**
-     * @param \Doctrine\Common\Persistence\ObjectRepository $objectRepository
-     */
-    public function __construct(ObjectRepository $objectRepository)
+    public function __construct($objectRepository)
     {
         $this->objectRepository = $objectRepository;
     }

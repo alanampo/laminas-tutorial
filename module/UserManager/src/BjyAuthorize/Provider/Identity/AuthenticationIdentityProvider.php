@@ -3,15 +3,15 @@
  * BjyAuthorize Module (https://github.com/bjyoungblood/BjyAuthorize)
  *
  * @link https://github.com/bjyoungblood/BjyAuthorize for the canonical source repository
- * @license http://framework.zend.com/license/new-bsd New BSD License
+ * @license http://framework.Laminas.com/license/new-bsd New BSD License
  */
 
 namespace BjyAuthorize\Provider\Identity;
 
 use BjyAuthorize\Exception\InvalidRoleException;
 use BjyAuthorize\Provider\Role\ProviderInterface as RoleProviderInterface;
-use Zend\Permissions\Acl\Role\RoleInterface;
-use Zend\Authentication\AuthenticationService;
+use Laminas\Permissions\Acl\Role\RoleInterface;
+use Laminas\Authentication\AuthenticationService;
 
 /**
  * Simple identity provider to handle simply guest|user
@@ -26,12 +26,12 @@ class AuthenticationIdentityProvider implements ProviderInterface
     protected $authService;
 
     /**
-     * @var string|\Zend\Permissions\Acl\Role\RoleInterface
+     * @var string|\Laminas\Permissions\Acl\Role\RoleInterface
      */
     protected $defaultRole = 'guest';
 
     /**
-     * @var string|\Zend\Permissions\Acl\Role\RoleInterface
+     * @var string|\Laminas\Permissions\Acl\Role\RoleInterface
      */
     protected $authenticatedRole = 'user';
 
@@ -66,7 +66,7 @@ class AuthenticationIdentityProvider implements ProviderInterface
     /**
      * Get the rule that's used if you're not authenticated
      *
-     * @return string|\Zend\Permissions\Acl\Role\RoleInterface
+     * @return string|\Laminas\Permissions\Acl\Role\RoleInterface
      */
     public function getDefaultRole()
     {
@@ -92,7 +92,7 @@ class AuthenticationIdentityProvider implements ProviderInterface
     /**
      * Get the role that is used if you're authenticated and the identity provides no role
      *
-     * @return string|\Zend\Permissions\Acl\Role\RoleInterface
+     * @return string|\Laminas\Permissions\Acl\Role\RoleInterface
      */
     public function getAuthenticatedRole()
     {
@@ -102,7 +102,7 @@ class AuthenticationIdentityProvider implements ProviderInterface
     /**
      * Set the role that is used if you're authenticated and the identity provides no role
      *
-     * @param string|\Zend\Permissions\Acl\Role\RoleInterface $authenticatedRole
+     * @param string|\Laminas\Permissions\Acl\Role\RoleInterface $authenticatedRole
      *
      * @throws \BjyAuthorize\Exception\InvalidRoleException
      *

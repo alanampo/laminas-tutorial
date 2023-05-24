@@ -6,11 +6,11 @@
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace BjyAuthorize\Service;
+namespace BjyAuthorize\Service\Factory;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Interop\Container\ContainerInterface;
+
 /**
  * Factory responsible of retrieving an array containing the BjyAuthorize configuration
  *
@@ -23,17 +23,10 @@ class ConfigServiceFactory implements FactoryInterface
      *
      * @return array
      */
-    
-     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-     {
-        $config = $serviceLocator->get('Config');   
-        //return $config['bjyauthorize'];
-         return new ConfigController(
-             $config
-         );
-     }
-
-
+    public function __invoke(ContainerInterface $container)
+    {
+        $config = $container->get('Config');
+        die("asddsa");
+        return $config['bjyauthorize'];
+    }
 }
-
-//
