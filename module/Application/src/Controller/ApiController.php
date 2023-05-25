@@ -20,9 +20,6 @@ class ApiController extends AbstractActionController
 
         $viewModel = new JsonModel($json);
 
-        $response = $this->getResponse();
-        $response->setStatusCode(206);
-        
        
         return $viewModel;
 

@@ -16,31 +16,7 @@ class Module
 {
     public function onBootstrap(MvcEvent $event)
     {
-        /* @var $app \Zend\Mvc\ApplicationInterface */
-        $app            = $event->getTarget();
-        /* @var $sm \Zend\ServiceManager\ServiceLocatorInterface */
         
-        $serviceManager = $app->getServiceManager();
-        
-        
-        
-        $config         = $serviceManager->get('BjyAuthorize\Config');
-        print_r($config);
-        die();
-        
-        $configBjy = $config["service_manager"]["factories"]["BjyAuthorize\Config"];
-       
-        $configGuard = $serviceManager->get('config')["service_manager"]["factories"]["BjyAuthorize\Guards"];
-        //$configGuard = $config["service_manager"]["factories"]["BjyAuthorize\Guards"];
-        // $strategy       = $serviceManager->get($config['unauthorized_strategy']);
-        
-       
-        // foreach ($guards as $guard) {
-            
-        //     $app->getEventManager()->attach($guard);
-        // }
-
-        // $app->getEventManager()->attach($strategy);
     }
 
 

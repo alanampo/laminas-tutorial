@@ -12,11 +12,13 @@
  * file.
  */
 
+$acl = include 'acl.inc.php';
 
 return [
     'db' => [
         'driver' => 'Pdo_Sqlite',
         'database'    => 'data/laminas1.db',
     ],
+    'acl' => $acl
     
 ];

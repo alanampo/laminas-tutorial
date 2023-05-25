@@ -39,8 +39,8 @@ class UsersTable extends AbstractTableGateway
 
 	public function fetchAllAccounts($paginated = false)
 	{
-		$sqlQuery = $this->sql->select()->join('roles', 'roles.role_id='.$this->table.'.role_id',
-		     ['role'])
+		$sqlQuery = $this->sql->select()->join('roles', 'roles.role_id='.$this->table.'.role_id'
+		     )
 		    ->where(['active' => 1])
 		    ->order('created ASC');
 
@@ -76,10 +76,13 @@ class UsersTable extends AbstractTableGateway
 	public function fetchAccountById(int $userId)
 	{
 		$sqlQuery = $this->sql->select()
-		    ->join('roles', 'roles.role_id='.$this->table.'.role_id', ['role_id', 'role'])
+		    ->join('roles', 'roles.role_id='.$this->table.'.role_id', ['role_id'])
 			->where(['user_id' => $userId]);
 		$sqlStmt  = $this->sql->prepareStatementForSqlObject($sqlQuery);
 		$handler  = $sqlStmt->execute()->current();
+
+		print_r($handler);
+		die();
 
 		if(!$handler) {
 			return null;
@@ -92,10 +95,25 @@ class UsersTable extends AbstractTableGateway
 		return $entity;
 	}
 
+	public function getRoleName($roleId){
+
+		$statement = $this->adapter->query('SELECT role FROM `roles` WHERE `role_id` = '.$roleId);
+
+		$results = $statement->execute();
+
+		$row = $results->current();
+		
+		return $row["role"];
+		
+		// $handler = $sqlStmt->execute()->current();
+
+		// $sqlQuery = $this->sql->select()->where(['role_id' => $roleId]);
+	}
+
 	public function fetchAccountByEmail(string $email)
 	{
 		$sqlQuery = $this->sql->select()
-            ->join('roles', 'roles.role_id='.$this->table.'.role_id', ['role_id', 'role'])
+            ->join('roles', 'roles.role_id='.$this->table.'.role_id', ['role_id'])
 			->where(['email' => $email]);
 		$sqlStmt = $this->sql->prepareStatementForSqlObject($sqlQuery);
 		$handler = $sqlStmt->execute()->current();
@@ -1128,8 +1146,6 @@ class UsersTable extends AbstractTableGateway
 			'displayname' => ucwords($data['displayname']),
 			'email'    => mb_strtolower($data['email']),
 			'password' => (new Bcrypt())->create($data['password']),
-            // 'birthday' => $data['birthday'],
-			// 'gender'   => $data['gender'],
 			'role_id'  => $this->assignRoleId(),
 			'created'  => $timeNow,
 			'modified' => $timeNow,
